@@ -1,70 +1,20 @@
-const express = require("express");
-const path = require("path");
-const session = require("express-session");
-const bcrypt = require('bcrypt');
+const express = require('express');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-app.use(
-    session({
-        secret: "replace_this_with_a_secure_key",
-        resave: false,
-        saveUninitialized: true,
-    })
-);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, 'public')));
 
-const USERS = [
-    {
-        id: 1,
-        username: "AdminUser",
-        email: "admin@example.com",
-        password: 'adminPassword', //Passwords probably shouldn't be stored in plaintext, we should fix that
-        role: "admin",
-    },
-    {
-        id: 2,
-        username: "RegularUser",
-        email: "user@example.com",
-        password: "userPassword",
-        role: "user", // Regular user
-    },
-];
-
-// GET /login - Render login form
-app.get("/login", (request, response) => {
-    response.render("login");
+app.get('/', (req, res) => {
+  res.render('home');
 });
 
-// POST /login - Allows a user to login
-app.post("/login", (request, response) => {
-
-});
-
-// GET /signup - Render signup form
-app.get("/signup", (request, response) => {
-    response.render("signup");
-});
-
-// POST /signup - Allows a user to signup
-app.post("/signup", (request, response) => {
-    
-});
-
-// GET / - Render index page or redirect to landing if logged in
-app.get("/", (request, response) => {
-    if (request.session.user) {
-        return response.redirect("/landing");
-    }
-    response.render("index");
-});
-
-// Start server
+// Start the server
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
+
