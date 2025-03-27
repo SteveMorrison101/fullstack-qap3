@@ -9,7 +9,12 @@
   <div class="container">
     <h1>Welcome, <%= user.username %>!</h1>
     <p>Your role is: <strong><%= user.role %></strong></p>
-    <a href="/">Go to Home</a>
+
+    <div class="buttons" style="margin-top: 30px;">
+      <a href="/" class="btn">Go to Home</a>
+      <a href="/logout" class="btn">Logout</a>
+    </div>
   </div>
 </body>
 </html>
+

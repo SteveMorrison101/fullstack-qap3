@@ -6,17 +6,17 @@ const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 3000;
 
+// 🛠️ In-memory users array with working bcrypt hash for 'Admin@123'
 const users = [
-  // Example admin user
   {
     username: 'admin',
     email: 'admin@example.com',
-    password: '$2b$10$9pMj/oqrVuEvIYHYRoS4We9LeC0BJUZv6AxUGZSVHjVbSyV8S9jEK', // 'adminpass'
+    password: '$2b$10$UG.Lhv6D1ZXj1NvG7KiGxe98dEosAGL3TwdpNo3i1LhIkSnWsJzk2', // Admin@123
     role: 'admin'
   }
 ];
 
-// Middleware setup
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
@@ -28,12 +28,24 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// Home page
+// 🔍 Debug route to check hash manually
+app.get('/test-admin', async (req, res) => {
+  const inputPassword = 'Admin@123';
+  const admin = users.find(u => u.email === 'admin@example.com');
+
+  const match = await bcrypt.compare(inputPassword, admin.password);
+  if (match) {
+    res.send('✅ Admin password matches! Ready to log in.');
+  } else {
+    res.send('❌ Password mismatch. Check hash or input.');
+  }
+});
+
+// Routes
 app.get('/', (req, res) => {
   res.render('home');
 });
 
-// Register page
 app.get('/register', (req, res) => {
   res.render('register', { error: null });
 });
@@ -56,7 +68,6 @@ app.post('/register', async (req, res) => {
   res.redirect('/dashboard');
 });
 
-// Login page
 app.get('/login', (req, res) => {
   res.render('login', { error: null });
 });
@@ -66,19 +77,22 @@ app.post('/login', async (req, res) => {
   const user = users.find(u => u.email === email);
 
   if (!user) {
+    console.log('❌ Email not found:', email);
     return res.render('login', { error: 'Invalid credentials.' });
   }
 
   const match = await bcrypt.compare(password, user.password);
+
   if (!match) {
+    console.log('❌ Password incorrect for:', email);
     return res.render('login', { error: 'Invalid credentials.' });
   }
 
+  console.log('✅ Logged in:', user.username);
   req.session.user = { username: user.username, email: user.email, role: user.role };
   res.redirect('/dashboard');
 });
 
-// Dashboard for user or admin
 app.get('/dashboard', (req, res) => {
   if (!req.session.user) {
     return res.redirect('/login');
@@ -92,7 +106,6 @@ app.get('/dashboard', (req, res) => {
   }
 });
 
-// Logout route
 app.get('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) return res.send('Logout error');
@@ -100,9 +113,9 @@ app.get('/logout', (req, res) => {
   });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
 
 
