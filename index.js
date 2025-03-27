@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const app = express();
 const PORT = 3000;
 
-// 🛠️ In-memory users array with working bcrypt hash for 'Admin@123'
+// In-memory users array with working bcrypt hash for 'Admin@123'
 const users = [
   {
     username: 'admin',
@@ -16,7 +16,6 @@ const users = [
   }
 ];
 
-// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
@@ -27,19 +26,6 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
-
-// 🔍 Debug route to check hash manually
-app.get('/test-admin', async (req, res) => {
-  const inputPassword = 'Admin@123';
-  const admin = users.find(u => u.email === 'admin@example.com');
-
-  const match = await bcrypt.compare(inputPassword, admin.password);
-  if (match) {
-    res.send('✅ Admin password matches! Ready to log in.');
-  } else {
-    res.send('❌ Password mismatch. Check hash or input.');
-  }
-});
 
 // Routes
 app.get('/', (req, res) => {
@@ -84,11 +70,11 @@ app.post('/login', async (req, res) => {
   const match = await bcrypt.compare(password, user.password);
 
   if (!match) {
-    console.log('❌ Password incorrect for:', email);
+    console.log('Password incorrect for:', email);
     return res.render('login', { error: 'Invalid credentials.' });
   }
 
-  console.log('✅ Logged in:', user.username);
+  console.log('Logged in:', user.username);
   req.session.user = { username: user.username, email: user.email, role: user.role };
   res.redirect('/dashboard');
 });
