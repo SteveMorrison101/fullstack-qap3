@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Dashboard</h1>
+    <p>Welcome, <strong><%= user.username %></strong>!</p>
+
+    <h2 style="margin-top: 30px; margin-bottom: 15px;">Registered Users</h2>
+    <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
+      <thead>
+        <tr style="border-bottom: 1px solid #fff;">
+          <th style="padding: 10px; text-align: left;">Username</th>
+          <th style="padding: 10px; text-align: left;">Email</th>
+          <th style="padding: 10px; text-align: left;">Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(u => { %>
+          <tr>
+            <td style="padding: 10px;"><%= u.username %></td>
+            <td style="padding: 10px;"><%= u.email %></td>
+            <td style="padding: 10px;"><%= u.role %></td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
+    <div style="margin-top: 30px;">
+      <a href="/logout" class="btn">Logout</a>
+    </div>
+  </div>
+</body>
+</html>
