@@ -63,7 +63,7 @@ app.post('/login', async (req, res) => {
   const user = users.find(u => u.email === email);
 
   if (!user) {
-    console.log('❌ Email not found:', email);
+    console.log('Email not found:', email);
     return res.render('login', { error: 'Invalid credentials.' });
   }
 
