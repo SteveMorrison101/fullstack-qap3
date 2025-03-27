@@ -3,32 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
+  <title>Register</title>
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Log In to Your Account</h1>
+    <h1>Create Your Account</h1>
 
     <% if (error) { %>
       <p style="color: #ff6b6b; margin-bottom: 20px;"><%= error %></p>
     <% } %>
 
-    <form action="/login" method="POST">
+    <form action="/register" method="POST">
+      <div style="margin-bottom: 20px;">
+        <input type="text" name="username" placeholder="Username" required
+          style="padding: 12px; width: 100%; border-radius: 8px; border: none; outline: none;" />
+      </div>
+
       <div style="margin-bottom: 20px;">
         <input type="email" name="email" placeholder="Email" required
           style="padding: 12px; width: 100%; border-radius: 8px; border: none; outline: none;" />
       </div>
 
       <div style="margin-bottom: 30px;">
-        <input type="password" name="password" placeholder="Password" required
+        <input type="password" name="password" placeholder="Password (min 8 chars)" required
           style="padding: 12px; width: 100%; border-radius: 8px; border: none; outline: none;" />
       </div>
 
-      <button type="submit" class="btn">Log In</button>
+      <button type="submit" class="btn">Register</button>
     </form>
 
-    <p style="margin-top: 20px;">Don’t have an account? <a href="/register" style="color: #00c6ff;">Register here</a></p>
+    <p style="margin-top: 20px;">Already have an account? <a href="/login" style="color: #00c6ff;">Login here</a></p>
   </div>
 </body>
 </html>
